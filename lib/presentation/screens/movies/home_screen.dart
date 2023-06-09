@@ -30,11 +30,21 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     super.initState();
 
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(upComingMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+    if (initialLoading) return const FullScreenLoader();
+
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final upComingMovies = ref.watch(upComingMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
 
     if (slideShowMovies.isEmpty) return const CircularProgressIndicator();
@@ -61,26 +71,25 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                         .loadNextPage(),
                   ),
                   MoviesHorizontalListview(
-                    movies: nowPlayingMovies,
+                    movies: upComingMovies,
                     title: 'Próximamente',
                     subTitle: 'En este mes',
                     loadNextPage: () => ref
-                        .read(nowPlayingMoviesProvider.notifier)
+                        .read(upComingMoviesProvider.notifier)
                         .loadNextPage(),
                   ),
                   MoviesHorizontalListview(
-                    movies: nowPlayingMovies,
+                    movies: popularMovies,
                     title: 'Populares',
-                    loadNextPage: () => ref
-                        .read(nowPlayingMoviesProvider.notifier)
-                        .loadNextPage(),
+                    loadNextPage: () =>
+                        ref.read(popularMoviesProvider.notifier).loadNextPage(),
                   ),
                   MoviesHorizontalListview(
-                    movies: nowPlayingMovies,
+                    movies: topRatedMovies,
                     title: 'Mejor calificadas',
                     subTitle: 'Desde siempre',
                     loadNextPage: () => ref
-                        .read(nowPlayingMoviesProvider.notifier)
+                        .read(topRatedMoviesProvider.notifier)
                         .loadNextPage(),
                   ),
                   const SizedBox(height: 15),
