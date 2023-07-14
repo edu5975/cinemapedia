@@ -9,3 +9,16 @@
 ---
 
 ## flutter pub run build_runner build
+
+Uso de:
+sliders
+localdatabase
+apis
+datasources
+repositorios
+mappers
+entities
+helpers
+contantes
+temas
+rutas
